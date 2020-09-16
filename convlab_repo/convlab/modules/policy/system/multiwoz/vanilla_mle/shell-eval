@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --job-name=conv-eval
+#SBATCH --output=./logs/eval.log
+#SBATCH --nodes=1
+#SBATCH -p cpu
+#SBATCH --mem=8G
+#SBATCH --time=4:20:00
+
+hostname
+source activate py36
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151904/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151907/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151912/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151917/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151923/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151928/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151933/model/rule_wdqn_bootstrap_memory_t0_s0
+python -u run.py demo.json rule_wdqn_bootstrap_memory eval@output/rule_wdqn_bootstrap_memory_2019_09_06_151939/model/rule_wdqn_bootstrap_memory_t0_s0
+
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150459/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150728/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150731/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150743/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150749/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150755/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150801/model/rule_dqn_t0_s0
+#python -u run.py demo.json rule_dqn eval@output/rule_dqn_2019_09_06_150817/model/rule_dqn_t0_s0
