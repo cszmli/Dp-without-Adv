@@ -5,7 +5,7 @@ There are two different parts in this work: (1)training a reward model with GAN-
 
 For the training of each part, please go to the corresponding folder.
 
-If you use the code for dialogue policy learning, feel free to cite our publication [Guided dialogue policy learning without adversarial learning in the loop](https://arxiv.org/abs/2004.03267):
+If you use the code for dialogue policy learning, feel free to cite our publication [Guided dialogue policy learning without adversarial learning in the loop](https://arxiv.org/abs/2004.03267v2):
 ``` 
 @article{li2020guided,
   title={Guided Dialog Policy Learning without Adversarial Learning in the Loop},
