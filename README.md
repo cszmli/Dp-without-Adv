@@ -1,4 +1,4 @@
-# dp-without-adv
+# Guided Dialogue Policy Learning without Adversarial Learning in the Loop
 This is the codebase for paper: "Guided dialogue policy learning without adversarial learning in the loop".
 
 There are two different parts in this work: (1)training a reward model with GAN-VAE, and (2)using the trained reward function to guide dialogue policy learing in ConvLab.
