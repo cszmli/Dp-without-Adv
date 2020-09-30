@@ -84,12 +84,15 @@ python -m nltk.downloader stopwords
 
 After you have installed convlab, copy folder 'agent/algorithm' and file 'agent/__init__.py' in this repository to the same place of your installed convab. The main functions are in 'dqn.py', 'ppo.py', 'reward_agent.py' and 'reward_utils.py'. Make sure they are replaced.
 
+
+
 ## Running ConvLab
 Once you've downloaded ConvLab and installed required packages, you can run the command-line interface with the `python run.py` command.
 ```bash
 $ python run.py {spec file} {spec name} {mode}
 ```
 
+#### you need to change the reward model path first in file dqn.py and ppo.py
 
 Running DQN + R(vae-gan):
 ```bash

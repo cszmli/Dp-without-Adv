@@ -132,7 +132,7 @@ class PPO(ActorCritic):
         self.reward_buffer = deque(maxlen=self.algorithm_spec['reward_buffer_size'])
 
         self.reward_agent = reward_agent.RewardAgent_EncoderSide(use_gpu, vae_type,update=update, real_data_feed=train_feed)   # this is the State Vae and Action Onehot version
-        reward_path = '../irl/NeuralDialog-LAED/logs/2019-09-06T12:04:49.278628-mwoz_gan_vae.py' # the pre trained vae-based reward
+        reward_path = './your/trained/model/path/2019-09-06T12:04:49.278628-mwoz_gan_vae.py' # the pre trained vae-based reward
         self.optim_gandisc=None
         if update:
             self.optim_gandisc = self.reward_agent.discriminator.get_optimizer()

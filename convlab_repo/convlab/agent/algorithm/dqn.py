@@ -260,30 +260,24 @@ class DQN(DQNBase):
     '''
     def __init__(self, agent, global_nets=None):
         super().__init__(agent, global_nets)
-        # create the extra replay memory for warm-up 
-        # reward_path = "./reward_model/2019-08-01T16-52-56-mwoz_gan_vae.py" 
-        # reward_path = './reward_model/2019-08-02T17-50-11-mwoz_gan_vae.py'
-        # reward_path = '../NeuralDialog-LAED/logs/2019-08-03T04-34-03-mwoz_gan_vae.py'
-        # reward_path = '../irl/NeuralDialog-LAED/logs/2019-08-19T13-56-13-mwoz_gan_vae.py'  # r5
-        # reward_path = '../irl/NeuralDialog-LAED/logs/2019-08-16T12-04-13-mwoz_gan_vae.py'  # r4  # this is the autoencoder based reward model
-        
+
         use_gpu = False
         # vae_type = 'autoencoder'
         vae_type = 'vae'
         # self.reward_agent = reward_agent.RewardAgent(use_gpu)
 
         # self.reward_agent = reward_agent.RewardAgent_EncoderSide(use_gpu, vae_type)   # this is the State Vae and Action Onehot version
-        # reward_path = '../irl/NeuralDialog-LAED/logs/2019-08-16T12-04-13-mwoz_gan_vae.py'  # r4  # this is the autoencoder based reward model
+        # reward_path = './your/trained/model/path/2019-08-16T12-04-13-mwoz_gan_vae.py'  # r4  # this is the autoencoder based reward model
 
 
         self.reward_agent = reward_agent.RewardAgent_EncoderSide(use_gpu, vae_type)   # this is the State Vae and Action Onehot version
-        reward_path = '../irl/NeuralDialog-LAED/logs/2019-09-06T12:04:49.278628-mwoz_gan_vae.py' # new trained vae-based reward
+        reward_path = './your/trained/model/path/2019-09-06T12:04:49.278628-mwoz_gan_vae.py' # new trained vae-based reward
        
         # self.reward_agent = reward_agent.RewardAgent_StateVaeActionSeg(use_gpu, vae_type)   # this is the State Vae and Action Seg version        
-        # reward_path = '../irl/NeuralDialog-LAED/logs/2019-09-18T20:06:28.509357-mwoz_gan_vae_StateActionEmbed.py' # new trained state_vae action_seg reward, Hotel excluded       
+        # reward_path = './your/trained/model/path/2019-09-18T20:06:28.509357-mwoz_gan_vae_StateActionEmbed.py' # new trained state_vae action_seg reward, Hotel excluded       
         
         # self.reward_agent = reward_agent.RewardAgent_StateVaeActionSeg(use_gpu, vae_type)   # this is the State Vae and Action Seg version        
-        # reward_path = '../irl/NeuralDialog-LAED/logs/2019-09-19T22:06:56.826004-mwoz_gan_vae_StateActionEmbed.py' # new trained state_vae action_seg reward, All domains      
+        # reward_path = './your/trained/model/path/logs/2019-09-19T22:06:56.826004-mwoz_gan_vae_StateActionEmbed.py' # new trained state_vae action_seg reward, All domains      
         
 
         val_feed = reward_utils.WoZGanDataLoaders('val')
