@@ -8,7 +8,7 @@ import json
 import torch
 import random
 import numpy as np
-from laed import evaluators, utt_utils, dialog_utils
+# from laed import evaluators, utt_utils, dialog_utils
 from gan import gan_main as engine
 from laed.dataset import corpora
 from laed.models.model_bases import summary
@@ -155,7 +155,8 @@ def main(config):
     np.random.seed(manualSeed)
     sample_shape = config.batch_size, config.state_noise_dim, config.action_noise_dim
 
-    evaluator = evaluators.BleuEvaluator(os.path.basename(__file__))
+    # evaluator = evaluators.BleuEvaluator(os.path.basename(__file__))
+    evaluator = False
 
     train_feed = WoZGanDataLoaders("train", config)
     valid_feed = WoZGanDataLoaders("val", config)

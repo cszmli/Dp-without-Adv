@@ -95,17 +95,7 @@ def gan_train(agent, machine_data, train_feed, valid_feed, test_feed, config, ev
         
             batch_cnt += 1
             train_loss.add_loss(disc_loss)
-            # train_loss.add_loss(disc_loss_self)
-            
-            # if batch_count_inside %100==0:
-            #     logger.info("@@@@@@@@@@ Epoch: {}  Batch: {} @@@@@@@@@@@@".format(done_epoch, batch_count_inside))
-            #     agent.eval()
-            #     logger.info("====Validate Discriminator====")
-            #     valid_loss_disc = disc_validate(agent,valid_feed, config, sample_shape, batch_cnt)
-            #     logger.info("====Validate Generator====")
-            #     valid_loss, gen_samples = gen_validate(agent,valid_feed, config, sample_shape, done_epoch, batch_cnt)
-            #     agent.train()
-            
+
             if batch_count_inside == 0 and done_epoch % 1==0:
                 logger.info("\n**** Epcoch {}/{} Done ****".format(done_epoch, config.max_epoch))
                 logger.info("\n=== Evaluating Model ===")
@@ -121,43 +111,22 @@ def gan_train(agent, machine_data, train_feed, valid_feed, test_feed, config, ev
                 if len(gen_samples)>0:
                     gen_sampled_list.append([done_epoch, gen_samples])
                 # logger.info("====Validate Discriminator for t-SNE====")
-                if config.domain=='movie':
-                    pred, disc_value = disc_validate_for_tsne(agent, machine_data, valid_feed, config, sample_shape)
-                elif config.domain=='multiwoz' and vae_flag:
-                    if agent.vae.vae_in_size==392:
-                        pred, disc_value = disc_validate_for_tsne_single_input(agent, machine_data, valid_feed, config, sample_shape)  
-                    elif agent.vae.vae_in_size==492:
-                        pred, disc_value = disc_validate_for_tsne_state_action_embed(agent, machine_data, valid_feed, config, sample_shape) 
-                elif  config.domain=='multiwoz' and not vae_flag:
-                    pred, disc_value = disc_validate_for_tsne(agent, machine_data, valid_feed, config, sample_shape) 
-
-                else:
-                    raise ValueError("no such domain: {}".format(config.domain))              
+                # you can skip this step because it is just an additional way to validate the disc.
+                if agent.vae.vae_in_size==392:
+                    pred, disc_value = disc_validate_for_tsne_single_input(agent, machine_data, valid_feed, config, sample_shape)  
+                elif agent.vae.vae_in_size==492:
+                    pred, disc_value = disc_validate_for_tsne_state_action_embed(agent, machine_data, valid_feed, config, sample_shape) 
+             
                 pred_list.append(pred)
 
-                # update early stopping stats
-                # if valid_loss < best_valid_loss:
-                if True:
-                    # if valid_loss <= valid_loss_threshold * config.improve_threshold:
-                    #     patience = max(patience,
-                    #                    done_epoch * config.patient_increase)
-                    #     valid_loss_threshold = valid_loss
-                        # logger.info("Update patience to {}".format(patience))
 
-                    # this is just for debugging which saves the latest models.
-                    # if config.save_model and disc_value[1]<disc_on_random_data[1]:
-                    # if config.save_model and (disc_value[0]-disc_value[1])>= largest_diff:                    
-                    # if config.save_model and valid_loss<best_valid_loss:
-                    if config.save_model:
-                        if config.domain=='movie':
-                            save_model(agent, config)
-                        # else:              
-                            # save_model_woz(agent, config) 
+                if config.save_model:         
+                    save_model_woz(agent, config) 
                         
-                        disc_on_random_data = disc_value
-                        epoch_valid = done_epoch
-                        best_valid_loss = valid_loss
-                        largest_diff = disc_value[0] - disc_value[1]
+                disc_on_random_data = disc_value
+                epoch_valid = done_epoch
+                best_valid_loss = valid_loss
+                largest_diff = disc_value[0] - disc_value[1]
                         
                 config.early_stop = False
                 if done_epoch >= config.max_epoch \

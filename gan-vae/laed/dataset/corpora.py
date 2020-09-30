@@ -11,7 +11,7 @@ import itertools
 from collections import defaultdict
 import copy
 # sys.path.append('./a3c/src')
-import a3c.src.deep_dialog.dialog_config as a3c_config
+# import a3c.src.deep_dialog.dialog_config as a3c_config
 
 PAD = '<pad>'
 UNK = '<unk>'
