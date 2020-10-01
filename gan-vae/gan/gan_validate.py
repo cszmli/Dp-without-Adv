@@ -188,15 +188,9 @@ def disc_validate_for_tsne_single_input(agent, machine_rep, valid_feed, config, 
             disc_value[0] += real_disc_v.mean().item()
         disc_value = disc_value/len(machine_rep)
         logger.info("Average disc value for human and machine: {:.3f}, {:.3f}".format(disc_value[0], disc_value[1]))
-<<<<<<< HEAD
         return [pred_human, pred_machine], disc_value                                                                                       
 
 def disc_validate_for_tsne_state_action_embed(agent, machine_rep, valid_feed, config, sample_shape):
-=======
-        return [pred_human, pred_machine], disc_value         
-
-def disc_validate_for_tsne_single_input(agent, machine_rep, valid_feed, config, sample_shape):
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
     # this function may be removed later
     with torch.no_grad():
         agent.eval()
@@ -207,13 +201,8 @@ def disc_validate_for_tsne_single_input(agent, machine_rep, valid_feed, config, 
         for batch_id, batch in enumerate(machine_rep):
             state_rep, action_rep = batch
             state_action = torch.cat([agent.cast_gpu(state_rep), agent.cast_gpu(action_rep)], -1)
-<<<<<<< HEAD
             state_rep = agent.get_vae_embed(state_action)
             disc_v = agent.discriminator(state_rep)
-=======
-            state_action_rep = agent.vae.encode(state_action)
-            disc_v = agent.discriminator(state_action_rep)
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             label = [1 if v>0.5 else 0 for v in disc_v.view(-1).tolist()]
             pred_machine = pred_machine + label
             disc_value[1] += disc_v.mean().item()  
@@ -221,16 +210,10 @@ def disc_validate_for_tsne_single_input(agent, machine_rep, valid_feed, config, 
             batch = valid_feed.next_batch()
             if batch is None:  
                 break 
-<<<<<<< HEAD
             # state_rep, action_rep = agent.read_real_data(sample_shape, batch)
             state_rep, action_rep = agent.read_real_data_onehot_300(sample_shape, batch)
             state_action = torch.cat([agent.cast_gpu(state_rep), agent.cast_gpu(action_rep)], -1)
             state_action_rep = agent.get_vae_embed(state_action)
-=======
-            state_rep, action_rep = agent.read_real_data(sample_shape, batch)
-            state_action = torch.cat([agent.cast_gpu(state_rep), agent.cast_gpu(action_rep)], -1)
-            state_action_rep = agent.vae.encode(state_action)
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             real_disc_v = agent.discriminator(state_action_rep)
             label = [1 if v>0.5 else 0 for v in disc_v.view(-1).tolist()]
             pred_human = pred_human + label 
@@ -295,7 +278,6 @@ def build_fake_data(agent, valid_feed, config, sample_shape, batch_cnt=None):
             batch = valid_feed.next_batch()
             if batch is None:  
                 break  
-<<<<<<< HEAD
             if config.domain=='movie' or config.input_type=='sat':
                 real_state_rep, action_data_feed = agent.read_real_data(sample_shape, batch)
             elif config.domain=='multiwoz':
@@ -310,13 +292,6 @@ def build_fake_data(agent, valid_feed, config, sample_shape, batch_cnt=None):
                 
             # machine_action_rep = shuffle_action(action_data_feed)
             machine_rep.append((machine_state_rep, machine_action_rep))
-=======
-            real_state_rep, action_data_feed = agent.read_real_data(sample_shape, batch)
-            # s_z = agent.cast_gpu(Variable(torch.Tensor(np.random.normal(0, 1, real_state_rep.shape))))
-            machine_state_rep =real_state_rep[:,torch.randperm(real_state_rep.size()[1])]    
-            # machine_state_rep = agent.cast_gpu(real_state_rep) + s_z
-            machine_rep.append((machine_state_rep, action_data_feed))
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             human_rep.append((real_state_rep.cpu(), action_data_feed.cpu()))
         return machine_rep, human_rep
 

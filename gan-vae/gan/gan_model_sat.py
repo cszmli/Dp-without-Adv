@@ -393,27 +393,10 @@ class WoZGenerator(BaseModel):
         self.state_model = nn.Sequential(
             # original: 5 block + 1 linear
             nn.Linear(state_in_size, 100),
-<<<<<<< HEAD
             nn.ReLU(True),
 
             # nn.Dropout(config.dropout),
             nn.Linear(100, 128),
-=======
-            nn.BatchNorm1d(100),
-            nn.ReLU(True),
-            
-            # nn.Linear(100, 100),
-            # # nn.BatchNorm1d(96),
-            # nn.ReLU(True),
-
-            # nn.Linear(100, 100),
-            # # nn.BatchNorm1d(96),
-            # nn.ReLU(True),
-
-            # nn.Dropout(config.dropout),
-            nn.Linear(100, 128),
-            nn.BatchNorm1d(128),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             nn.ReLU(True),
             # nn.Dropout(config.dropout),
 
@@ -438,35 +421,17 @@ class WoZGenerator(BaseModel):
             # nn.ReLU(True),
             # # nn.Dropout(config.dropout),
 
-<<<<<<< HEAD
             # nn.Linear(state_in_size, state_in_size),
             # # nn.BatchNorm1d(state_in_size),
             # nn.ReLU(True),
-=======
-            nn.Linear(96, state_in_size),
-            # nn.BatchNorm1d(state_in_size),
-            nn.ReLU(True),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
         )
         # '''
         self.action_model_2 = nn.Sequential(
             # nn.Linear( self.state_out_size_final, 96),
             nn.Linear( self.state_out_size, 96),            
-<<<<<<< HEAD
             nn.ReLU(True),
             
             nn.Linear(96, 96),
-=======
-            # nn.Linear(action_in_size, 96),
-            nn.BatchNorm1d(96),
-            nn.ReLU(True),
-            
-            # nn.Linear(96, 96),
-            # nn.ReLU(True),
-            
-             nn.Linear(96, 96),
-            nn.BatchNorm1d(96),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             nn.ReLU(True),
 
             nn.Linear(96, action_out_size)
@@ -493,11 +458,7 @@ class WoZGenerator(BaseModel):
         input_to_gumble = []
         for layer, g_width in zip(self.last_layers, self.gumble_length_index):
             out = layer(state_rep1)
-<<<<<<< HEAD
             out = self.gumbel_connector.forward_ST_soft(out.view(-1,  g_width), self.config.gumbel_temp)
-=======
-            out = self.gumbel_connector.forward_ST(out.view(-1,  g_width), self.config.gumbel_temp)
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             input_to_gumble.append(out)
         state_rep = torch.cat(input_to_gumble, -1)
         # print(state_rep.size())
@@ -505,11 +466,7 @@ class WoZGenerator(BaseModel):
         # action_rep_2 = self.action_model_2(state_action_turn_pair)
         # action_rep_2 = self.action_model_2(state_rep)
         action_rep_2 = self.action_model_2(state_rep1)        
-<<<<<<< HEAD
         action_rep = self.gumbel_connector.forward_ST_soft(action_rep_2, self.config.gumbel_temp)
-=======
-        action_rep = self.gumbel_connector.forward_ST(action_rep_2, self.config.gumbel_temp)
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
         return state_rep, action_rep
 
 class WoZGenerator_StateVae(BaseModel):
@@ -630,11 +587,7 @@ class WoZDiscriminator(BaseModel):
             nn.Dropout(config.dropout),
             # nn.Dropout(0.5),
             
-<<<<<<< HEAD
             nn.Linear(32, 32),
-=======
-            nn.Linear(64, 32),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             # nn.BatchNorm1d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(config.dropout),

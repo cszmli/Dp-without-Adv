@@ -130,11 +130,6 @@ class Generator(BaseModel):
     def forward(self, s_z, a_z):
         state_action_embedding = self.state_action_model(self.cast_gpu(s_z))
         return state_action_embedding
-<<<<<<< HEAD
-=======
-
-
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
 
 
 class Discriminator(BaseModel):
@@ -180,7 +175,6 @@ class Discriminator(BaseModel):
         validity = torch.sigmoid(self.model(state_action))
         validity = torch.clamp(validity, 1e-8, 1-1e-8)
         return validity
-<<<<<<< HEAD
 
 class Discriminator_SA(BaseModel):
     def __init__(self, config):
@@ -233,21 +227,6 @@ class Discriminator_StateAction(BaseModel):
             # nn.Linear(self.state_in_size/2, 64),
             # nn.Dropout(config.dropout),            
             nn.Linear(self.input_size, 64),
-=======
-
-class Discriminator_SA(BaseModel):
-    def __init__(self, config):
-        super(Discriminator_SA, self).__init__(config)
-        config.dropout = 0.3
-        self.input_size = config.vae_embed_size
-        self.noise_input = 0.01
-        self.model = nn.Sequential(
-            # nn.Dropout(config.dropout),
-
-            # nn.Linear(self.state_in_size/2, 64),
-            # nn.Dropout(config.dropout),            
-            nn.Linear(self.input_size, 32),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
@@ -257,45 +236,18 @@ class Discriminator_SA(BaseModel):
             # nn.ReLU(),
             # nn.Dropout(config.dropout),
             
-<<<<<<< HEAD
             nn.Linear(64,32),
-=======
-            nn.Linear(32,32),
-            # nn.BatchNorm1d(64),
-            nn.ReLU(),
-            nn.Dropout(config.dropout),
-            
-             nn.Linear(32,32),
-            # nn.BatchNorm1d(64),
-            nn.ReLU(),
-            nn.Dropout(config.dropout),
-            
-             nn.Linear(32,16),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
 
-<<<<<<< HEAD
             nn.Linear(32, 1)
-=======
-            nn.Linear(16, 1)
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
         )
         # self.state_nor_layer=LayerNorm(self.state_in_size/2)
         # self.action_nor_layer=LayerNorm(self.action_in_size/2)
 
     def decay_noise(self):
         self.noise_input *= 0.995
-<<<<<<< HEAD
-=======
-
-    def forward(self, state_action):
-        validity = torch.sigmoid(self.model(self.cast_gpu(state_action)))
-        validity = torch.clamp(validity, 1e-8, 1-1e-8)
-        return validity
-    
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
 
     def forward(self, state_action):
         validity = torch.sigmoid(self.model(self.cast_gpu(state_action)))
@@ -411,12 +363,8 @@ class VAE(BaseModel):
     def __init__(self, config):
         super(VAE, self).__init__(config)
         self.config = config
-<<<<<<< HEAD
         self.vae_in_size = config.state_out_size
         self.vae_embed_size = config.vae_embed_size
-=======
-        self.vae_in_size = config.state_out_size + 9
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
         
         self.encode_model = nn.Sequential(
             nn.Linear(self.vae_in_size, self.vae_in_size/4),
@@ -425,11 +373,7 @@ class VAE(BaseModel):
             # nn.ReLU(True)        
         )
         self.decode_model = nn.Sequential(
-<<<<<<< HEAD
             nn.Linear(self.vae_embed_size, self.vae_in_size/4),
-=======
-            nn.Linear(30, self.vae_in_size/4),
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
             nn.ReLU(True),
             # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
             # nn.ReLU(True),
@@ -437,17 +381,12 @@ class VAE(BaseModel):
         )
         
         
-<<<<<<< HEAD
         self.fc21 = nn.Linear(self.vae_in_size/4, self.vae_embed_size)
         self.fc22 = nn.Linear(self.vae_in_size/4, self.vae_embed_size)
 
     def get_embed(self, x):
         mean, _ = self.encode(x)
         return mean
-=======
-        self.fc21 = nn.Linear(self.vae_in_size/4, 30)
-        self.fc22 = nn.Linear(self.vae_in_size/4, 30)
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
 
     def encode(self, x):
         h = self.encode_model(x)
@@ -469,7 +408,6 @@ class VAE(BaseModel):
         z = self.reparameterize(mu, logvar)
         return self.decode(z), mu, logvar
     
-<<<<<<< HEAD
 
 class VAE_StateActionEmbed(VAE):
     def __init__(self, config):
@@ -568,20 +506,12 @@ class VAE_StateActionEmbedMerged(VAE):
         return torch.sigmoid(h)
 
 
-=======
-    
-       
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
 class AutoEncoder(BaseModel):
     def __init__(self, config):
         super(AutoEncoder, self).__init__(config)
         self.config = config
-<<<<<<< HEAD
         # self.vae_in_size = config.state_out_size + 9
         self.vae_in_size = config.state_out_size
-=======
-        self.vae_in_size = config.state_out_size + 9
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
         self.vae_embed_size = config.vae_embed_size
         
         self.encode_model = nn.Sequential(
@@ -603,13 +533,9 @@ class AutoEncoder(BaseModel):
             nn.Sigmoid(),
         )
         
-<<<<<<< HEAD
     def get_embed(self, x):
         return self.encode(x)
         
-=======
-
->>>>>>> d6f985ec03a61d340f5c55d840b3e8573cf13535
     def encode(self, x):
         h = self.encode_model(x)
         return h
