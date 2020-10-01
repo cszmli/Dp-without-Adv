@@ -218,7 +218,7 @@ def main(config):
     
     
     # this is a pretrained vae model, you can load it to the current model. TODO: move path todata_args
-    path='/home/zli1/irl/NeuralDialog-LAED/logs/2019-09-06T10:50:18.034181-mwoz_gan_vae.py'
+    path='./logs/2019-09-06T10:50:18.034181-mwoz_gan_vae.py'
     load_model_vae(model, path)
     
     print("Start GAN training")
