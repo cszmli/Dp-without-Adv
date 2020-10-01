@@ -119,11 +119,5 @@ The data can found here: [zip](https://drive.google.com/file/d/16BbNowEfSUZTRO0B
 
 The pre-trained models can be found here: [zip](https://drive.google.com/file/d/1RdcG4nHlS4NqDtNWUscTU-mp4NZyWwOA/view?usp=sharing).
 
-## Creating a new spec file
-A spec file is used to fully specify experiments including a dialog agent and a user simulator. It is a JSON of multiple experiment specs, each containing the keys agent, env, body, meta, search.
-
-We based our implementation on [SLM-Lab](https://github.com/kengz/SLM-Lab/tree/master/slm_lab). For an introduction to these concepts, you should check [these docs](https://kengz.gitbooks.io/slm-lab/content/).
-
-Instead of writing one from scratch, you are welcome to modify the `convlab/spec/demo.json` file. Once you have created a new spec file, place it under `convlab/spec` directory and run your experiments. Note that you don't have to prepend `convlab/spec/` before your spec file name.
 
 
