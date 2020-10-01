@@ -82,10 +82,6 @@ ConvLab uses 'stopwords' in nltk, and you need to download it by running
 python -m nltk.downloader stopwords
 ```
 
-After you have installed convlab, copy folder 'agent/algorithm' and file 'agent/__init__.py' in this repository to the same place of your installed convab. The main functions are in 'dqn.py', 'ppo.py', 'reward_agent.py' and 'reward_utils.py'. Make sure they are replaced.
-
-
-You can reuse the pre-trained reward model to train your model. 
 
 
 ## Running ConvLab
@@ -94,7 +90,7 @@ Once you've downloaded ConvLab and installed required packages, you can run the 
 $ python run.py {spec file} {spec name} {mode}
 ```
 
-#### you need to change the reward model path first in file dqn.py and ppo.py. 
+#### Dont't forget to change the reward model path first in file dqn.py and ppo.py. 
 You can reuse the provided reward model to train your model. Just change the model path: `reward_path = './your/trained/model/path/2019-09-06T12:04:49.278628-mwoz_gan_vae.py`
 
 Running DQN + R(vae-gan):

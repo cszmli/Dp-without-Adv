@@ -313,17 +313,17 @@ class DQN(DQNBase):
         self.reward_count += batch_rewards_ori.mean().item()
         self.batch_count += 1
         # batch_rewards = batch_rewards_ori + batch['rewards']
-        # batch_rewards = batch_rewards_log + batch['rewards']
+        batch_rewards = batch_rewards_log + batch['rewards']
         # batch_rewards = batch_reward_log_minus_one
         # batch_rewards = batch_rewards_log 
         # batch_rewards = batch_rewards_log_double + batch['rewards']
         
         # batch_rewards = batch['rewards']
 
-        flag = copy.deepcopy(batch['rewards'])
-        flag[flag<=0]=0
-        flag[flag>0]=1
-        batch_rewards = batch_rewards_log + flag * batch['rewards']
+        # flag = copy.deepcopy(batch['rewards'])
+        # flag[flag<=0]=0
+        # flag[flag>0]=1
+        # batch_rewards = batch_rewards_log + flag * batch['rewards']
 
         states = batch['states']
         next_states = batch['next_states']
