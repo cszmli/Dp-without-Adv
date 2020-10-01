@@ -252,15 +252,10 @@ class Discriminator(BaseModel):
         self.state_rep = nn.Linear(self.state_in_size, int(self.state_in_size/2))
         self.action_rep = nn.Linear(self.action_in_size, int(self.action_in_size/2))
         self.model = nn.Sequential(
-            # nn.BatchNorm1d(self.state_in_size/2 + self.action_in_size/2),
-            # nn.ReLU(),
             nn.ReLU(),
-            # nn.Dropout(0.5),
             nn.Dropout(dropout),
 
-            # nn.Linear(self.state_in_size/2, 64),
             nn.Linear(int(self.state_in_size/2 + self.action_in_size/2), 64),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(dropout),
             nn.Linear(64, 1)
@@ -299,8 +294,6 @@ class AutoEncoder(BaseModel):
             nn.Linear(self.vae_embed_size, int(self.vae_in_size/2)),
             nn.Sigmoid(),
             nn.Dropout(dropout),                      
-            # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
-            # nn.ReLU(True),
             nn.Linear(int(self.vae_in_size/2), self.vae_in_size),
             nn.Sigmoid(),
         )
@@ -331,15 +324,11 @@ class VAE(BaseModel):
 
         self.encode_model = nn.Sequential(
             nn.Linear(self.vae_in_size, self.vae_in_size//4),
-            nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/2, self.vae_in_size/4),
-            # nn.ReLU(True)        
+            nn.ReLU(True),    
         )
         self.decode_model = nn.Sequential(
             nn.Linear(self.vae_embed_size, self.vae_in_size//4),
             nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
-            # nn.ReLU(True),
             nn.Linear(self.vae_in_size//4, self.vae_in_size),
         )
         
@@ -382,11 +371,7 @@ class Discriminator_SA(BaseModel):
         self.input_size = 64
         self.noise_input = 0.01
         self.model = nn.Sequential(
-            # nn.Dropout(dropout),
-
-            # nn.Linear(self.state_in_size/2, 64),
             nn.Linear(self.input_size, 64),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(dropout),
             
@@ -394,18 +379,8 @@ class Discriminator_SA(BaseModel):
             nn.ReLU(),
             nn.Dropout(dropout),
             
-            # nn.Linear(32,32),
-            # nn.ReLU(),
-            # nn.Dropout(dropout),
-            
-            #  nn.Linear(32,16),
-            # nn.ReLU(),
-            # nn.Dropout(dropout),
-
             nn.Linear(32, 1)
         )
-        # self.state_nor_layer=LayerNorm(self.state_in_size/2)
-        # self.action_nor_layer=LayerNorm(self.action_in_size/2)
 
     def decay_noise(self):
         self.noise_input *= 0.995
@@ -432,15 +407,11 @@ class WoZDiscriminator(BaseModel):
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
 
-            # nn.Linear(self.state_in_size/2, 64),
             nn.Linear(self.state_in_size//2 + self.action_in_size//3, 32),
-            # nn.BatchNorm1d(64),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
-            # nn.Dropout(0.5),
             
             nn.Linear(32, 32),
-            # nn.BatchNorm1d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
 
@@ -475,15 +446,11 @@ class WoZDiscriminator_Update(BaseModel):
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
 
-            # nn.Linear(self.state_in_size/2, 64),
             nn.Linear(self.state_in_size//2 + self.action_in_size//3, 32),
-            # nn.BatchNorm1d(64),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
-            # nn.Dropout(0.5),
             
             nn.Linear(32, 32),
-            # nn.BatchNorm1d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
 
@@ -548,15 +515,11 @@ class WoZDiscriminator_StateVaeActionSeg(WoZDiscriminator):
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
 
-            # nn.Linear(self.state_in_size/2, 64),
             nn.Linear(self.state_in_size//2 + self.action_in_size//3, 32),
-            # nn.BatchNorm1d(64),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
-            # nn.Dropout(0.5),
             
             nn.Linear(32, 32),
-            # nn.BatchNorm1d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout(dropout),
             nn.Linear(32, 1),
