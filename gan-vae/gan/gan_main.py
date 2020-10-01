@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 import numpy as np
-from laed.models.model_bases import summary
 import torch
-from laed.dataset.corpora import PAD, EOS, EOT
-from laed.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN
-from laed.utils import get_dekenize
 import os
 from collections import defaultdict
 import logging
-from torch_utils import weights_init, adjust_learning_rate, one_hot_embedding, HistoryData
-from utils import print_accuracy, save_model, save_model_woz, save_model_vae, load_model_vae
-from gan_validate import disc_validate, vae_validate, gen_validate, policy_validate_for_human, LossManager, disc_validate_for_tsne, disc_train_history, disc_validate_for_tsne_single_input, disc_validate_for_tsne_state_action_embed
+from torch_utils import  HistoryData
+from utils import  save_model, save_model_woz, save_model_vae
+from gan_validate import disc_validate, vae_validate, gen_validate, LossManager, disc_validate_for_tsne_single_input, disc_validate_for_tsne_state_action_embed
 logger = logging.getLogger()
 
 def train_disc_with_history(agent, history_pool, batch, sample_shape, disc_optimizer, batch_cnt):
@@ -66,8 +62,6 @@ def gan_train(agent, machine_data, train_feed, valid_feed, test_feed, config, ev
                 agent.discriminator.decay_noise()
                 break
             
-            # fix the context encoder output
-            # agent.context_encoder.eval()
                 ''''''''''''''' Training discriminator '''''''''''''''
             for _ in range(config.gan_ratio):
                 if config.gan_type=='wgan':
@@ -86,25 +80,13 @@ def gan_train(agent, machine_data, train_feed, valid_feed, test_feed, config, ev
             if config.domain=='multiwoz' and vae_flag:
                 generator_vae_optimizer.zero_grad()
             gen_loss, fake_s_a = agent.gen_train(sample_shape)
-            agent.generator.backward(batch_cnt, gen_loss)
-            # generator_vae_optimizer.step()            
+            agent.generator.backward(batch_cnt, gen_loss)       
             generator_optimizer.step()
             history_pool.add(fake_s_a)
-            # '''
-
-        
+ 
             batch_cnt += 1
             train_loss.add_loss(disc_loss)
-            # train_loss.add_loss(disc_loss_self)
-            
-            # if batch_count_inside %100==0:
-            #     logger.info("@@@@@@@@@@ Epoch: {}  Batch: {} @@@@@@@@@@@@".format(done_epoch, batch_count_inside))
-            #     agent.eval()
-            #     logger.info("====Validate Discriminator====")
-            #     valid_loss_disc = disc_validate(agent,valid_feed, config, sample_shape, batch_cnt)
-            #     logger.info("====Validate Generator====")
-            #     valid_loss, gen_samples = gen_validate(agent,valid_feed, config, sample_shape, done_epoch, batch_cnt)
-            #     agent.train()
+
             
             if batch_count_inside == 0 and done_epoch % 1==0:
                 logger.info("\n**** Epcoch {}/{} Done ****".format(done_epoch, config.max_epoch))
@@ -121,46 +103,29 @@ def gan_train(agent, machine_data, train_feed, valid_feed, test_feed, config, ev
                 if len(gen_samples)>0:
                     gen_sampled_list.append([done_epoch, gen_samples])
                 # logger.info("====Validate Discriminator for t-SNE====")
-                # if config.domain=='movie':
-                #     pred, disc_value = disc_validate_for_tsne(agent, machine_data, valid_feed, config, sample_shape)
-                # elif config.domain=='multiwoz' and vae_flag:
+                # you can skip this step; this is just an additioanl way to validate the discriminator
                 if agent.vae.vae_in_size==392:
                     pred, disc_value = disc_validate_for_tsne_single_input(agent, machine_data, valid_feed, config, sample_shape)  
                 elif agent.vae.vae_in_size==492:
                     pred, disc_value = disc_validate_for_tsne_state_action_embed(agent, machine_data, valid_feed, config, sample_shape) 
-                # elif  config.domain=='multiwoz' and not vae_flag:
-                #     # pred, disc_value = disc_validate_for_tsne(agent, machine_data, valid_feed, config, sample_shape) 
-                #     pred, disc_value = disc_validate_for_tsne_single_input(agent, machine_data, valid_feed, config, sample_shape)  
 
 
                 else:
                     raise ValueError("no such domain: {}".format(config.domain))              
                 pred_list.append(pred)
 
-                # update early stopping stats
-                # if valid_loss < best_valid_loss:
-                if True:
-                    # if valid_loss <= valid_loss_threshold * config.improve_threshold:
-                    #     patience = max(patience,
-                    #                    done_epoch * config.patient_increase)
-                    #     valid_loss_threshold = valid_loss
-                        # logger.info("Update patience to {}".format(patience))
-
-                    # this is just for debugging which saves the latest models.
-                    # if config.save_model and disc_value[1]<disc_on_random_data[1]:
-                    # if config.save_model and (disc_value[0]-disc_value[1])>= largest_diff:                    
-                    # if config.save_model and valid_loss<best_valid_loss:
-                    if config.save_model:
-                        if config.domain=='movie':
-                            save_model(agent, config)
-                        # else:              
-                            # save_model_woz(agent, config) 
-                        
-                        disc_on_random_data = disc_value
-                        epoch_valid = done_epoch
-                        best_valid_loss = valid_loss
-                        largest_diff = disc_value[0] - disc_value[1]
-                        
+        
+                if config.save_model:
+                    if config.domain=='movie':
+                        save_model(agent, config)
+                    else:              
+                        save_model_woz(agent, config) 
+                    
+                    disc_on_random_data = disc_value
+                    epoch_valid = done_epoch
+                    best_valid_loss = valid_loss
+                    largest_diff = disc_value[0] - disc_value[1]
+                    
                 config.early_stop = False
                 if done_epoch >= config.max_epoch \
                         or config.early_stop and patience <= done_epoch:

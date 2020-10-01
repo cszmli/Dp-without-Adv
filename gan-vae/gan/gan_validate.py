@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 import numpy as np
-from laed.models.model_bases import summary
+# from laed.models.model_bases import summary
 from torch.autograd import Variable
 import torch
-from laed.dataset.corpora import PAD, EOS, EOT
-from laed.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN
-from laed.utils import get_dekenize
+# from laed.dataset.corpora import PAD, EOS, EOT
+# from laed.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN
+# from laed.utils import get_dekenize
 import os
 from collections import defaultdict
 import logging
-from torch_utils import one_hot_embedding
+# from torch_utils import one_hot_embedding
 from utils import print_accuracy
 logger = logging.getLogger()
 

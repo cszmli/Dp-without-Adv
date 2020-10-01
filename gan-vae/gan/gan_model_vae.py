@@ -7,9 +7,9 @@ from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-from laed import nn_lib
-from laed.enc2dec import decoders
-from laed.enc2dec.decoders import DecoderRNN
+# from laed import nn_lib
+# from laed.enc2dec import decoders
+# from laed.enc2dec.decoders import DecoderRNN
 from laed.enc2dec.encoders import EncoderRNN, RnnUttEncoder
 from laed.dataset.corpora import PAD, EOS, EOT, BOS
 from laed.utils import INT, FLOAT, LONG, cast_type, Pack
@@ -142,27 +142,15 @@ class Discriminator(BaseModel):
         self.action_rep = nn.Linear(self.action_in_size, self.action_in_size/2)
         
         self.model = nn.Sequential(
-            # nn.BatchNorm1d(self.state_in_size/2 + self.action_in_size/2),
             nn.ReLU(),
-            # nn.Dropout(0.5),
             nn.Dropout(config.dropout),
 
-            # nn.Linear(self.state_in_size/2, 64),
             nn.Linear(self.state_in_size/2 + self.action_in_size/2, 64),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
-
-            # nn.Linear(64, 32),
-            # # nn.BatchNorm1d(32),
-            # nn.ReLU(True),
-            # nn.Dropout(config.dropout),
-            # # nn.Dropout(0.5),
 
             nn.Linear(64, 1)
         )
-        # self.state_nor_layer=LayerNorm(self.state_in_size/2)
-        # self.action_nor_layer=LayerNorm(self.action_in_size/2)
 
     def decay_noise(self):
         self.noise_input *= 0.995
@@ -183,30 +171,18 @@ class Discriminator_SA(BaseModel):
         self.input_size = config.vae_embed_size
         self.noise_input = 0.01
         self.model = nn.Sequential(
-            # nn.Dropout(config.dropout),
-
-            # nn.Linear(self.state_in_size/2, 64),
-            # nn.Dropout(config.dropout),            
+            
             nn.Linear(self.input_size, 64),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
             
-            # nn.Linear(64,32),
-            # # nn.BatchNorm1d(64),
-            # nn.ReLU(),
-            # nn.Dropout(config.dropout),
-            
+
             nn.Linear(64,32),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
 
             nn.Linear(32, 1)
         )
-        # self.state_nor_layer=LayerNorm(self.state_in_size/2)
-        # self.action_nor_layer=LayerNorm(self.action_in_size/2)
-
     def decay_noise(self):
         self.noise_input *= 0.995
 
@@ -222,29 +198,17 @@ class Discriminator_StateAction(BaseModel):
         self.input_size = config.vae_embed_size
         self.noise_input = 0.01
         self.model = nn.Sequential(
-            # nn.Dropout(config.dropout),
-
-            # nn.Linear(self.state_in_size/2, 64),
-            # nn.Dropout(config.dropout),            
+         
             nn.Linear(self.input_size, 64),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
             
-            # nn.Linear(64,32),
-            # # nn.BatchNorm1d(64),
-            # nn.ReLU(),
-            # nn.Dropout(config.dropout),
-            
             nn.Linear(64,32),
-            # nn.BatchNorm1d(64),
             nn.ReLU(),
             nn.Dropout(config.dropout),
 
             nn.Linear(32, 1)
         )
-        # self.state_nor_layer=LayerNorm(self.state_in_size/2)
-        # self.action_nor_layer=LayerNorm(self.action_in_size/2)
 
     def decay_noise(self):
         self.noise_input *= 0.995
@@ -368,15 +332,11 @@ class VAE(BaseModel):
         
         self.encode_model = nn.Sequential(
             nn.Linear(self.vae_in_size, self.vae_in_size/4),
-            nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/2, self.vae_in_size/4),
-            # nn.ReLU(True)        
+            nn.ReLU(True),    
         )
         self.decode_model = nn.Sequential(
             nn.Linear(self.vae_embed_size, self.vae_in_size/4),
             nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
-            # nn.ReLU(True),
             nn.Linear(self.vae_in_size/4, self.vae_in_size),
         )
         
@@ -428,14 +388,11 @@ class VAE_StateActionEmbed(VAE):
         self.encode_model = nn.Sequential(
             nn.Linear(self.vae_in_size//2, self.vae_in_size//4),
             nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/2, self.vae_in_size/4),
-            # nn.ReLU(True)        
+   
         )
         self.decode_model = nn.Sequential(
             nn.Linear(self.vae_embed_size, self.vae_in_size//4),
             nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
-            # nn.ReLU(True),
             nn.Linear(self.vae_in_size//4, self.vae_in_size//2),
             nn.ReLU(True),
         )
@@ -476,26 +433,17 @@ class VAE_StateActionEmbedMerged(VAE):
 
         self.encode_model = nn.Sequential(
             nn.Linear(self.vae_in_size, self.vae_in_size//4),
-            nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/2, self.vae_in_size/4),
-            # nn.ReLU(True)        
+            nn.ReLU(True),   
         )
         self.decode_model = nn.Sequential(
             nn.Linear(self.vae_embed_size, self.vae_in_size//4),
             nn.ReLU(True),
-            # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
-            # nn.ReLU(True),
             nn.Linear(self.vae_in_size//4, self.vae_in_size),
         )
         
         
         self.fc21 = nn.Linear(self.vae_in_size//4, self.vae_embed_size)
         self.fc22 = nn.Linear(self.vae_in_size//4, self.vae_embed_size)
-
-    # def get_embed(self, x):
-    #     mu, logvar = self.encode(x)
-    #     z = self.reparameterize(mu, logvar)
-    #     return z
 
     def encode(self, x):
         h = self.encode_model(x)
@@ -527,8 +475,6 @@ class AutoEncoder(BaseModel):
             nn.Linear(self.vae_embed_size, self.vae_in_size/2),
             nn.Sigmoid(),
             nn.Dropout(config.dropout),                      
-            # nn.Linear(self.vae_in_size/4, self.vae_in_size/2),
-            # nn.ReLU(True),
             nn.Linear(self.vae_in_size/2, self.vae_in_size),
             nn.Sigmoid(),
         )

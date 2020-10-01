@@ -8,14 +8,10 @@ import json
 import torch
 import random
 import numpy as np
-# from laed import evaluators, utt_utils, dialog_utils
 from gan import gan_main as engine
-from laed.dataset import corpora
 from laed.models.model_bases import summary
-from laed.dataset import data_loaders
-from laed.models import sent_models
-from laed.models import dialog_models
-from gan.gan_agent import GanRnnAgent, GanAgent_SAT, GanAgent_SAT_WoZ, GanAgent_AutoEncoder, GanAgent_AutoEncoder_Encode, GanAgent_AutoEncoder_State, GanAgent_VAE_State, WGanAgent_VAE_State
+
+from gan.gan_agent import GanAgent_VAE_State, WGanAgent_VAE_State
 from gan.torch_utils import  weights_init
 from gan.utils import load_context_encoder, load_action2name, save_data_for_tsne, load_model_vae
 from laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
@@ -222,7 +218,7 @@ def main(config):
     
     
     # this is a pretrained vae model, you can load it to the current model. TODO: move path todata_args
-    path='./logs/2019-09-06T10:50:18.034181-mwoz_gan_vae.py'
+    path='/home/zli1/irl/NeuralDialog-LAED/logs/2019-09-06T10:50:18.034181-mwoz_gan_vae.py'
     load_model_vae(model, path)
     
     print("Start GAN training")
