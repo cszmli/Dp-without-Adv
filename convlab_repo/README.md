@@ -113,7 +113,7 @@ $ python -u run.py demo.json rule_ppo train
 $ python run.py demo.json rule_ppo eval@output/rule_ppo_{timestamp}/model/rule_ppo_t0_s0
 ```
 
-The data can found here: [zip](https://drive.google.com/file/d/16BbNowEfSUZTRO0BqDbTGeg5ZBKq7xkE/view?usp=sharing).
+The data can be found here: [zip](https://drive.google.com/file/d/16BbNowEfSUZTRO0BqDbTGeg5ZBKq7xkE/view?usp=sharing).
 
 
 
